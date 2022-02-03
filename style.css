@@ -1,6 +1,7 @@
 body{
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
@@ -10,17 +11,7 @@ body{
     gap: 10px;
     flex-wrap: wrap;
     width: 960px;
+ 
 }
 
-.grid-item{
 
-    transition: .5s all;
-    height: 50px; 
-    width: 50px;
-    background-color: blue;
-}
-
-.red{
-
-    background-color: red;
-}
