@@ -7,9 +7,14 @@ const btn_scale = document.querySelector('#opacity');
 const btn_rainbow = document.querySelector('#rainbow');
 const cred = "#ff0000";
 const cwhite = "#ffffff";
+const defcolor = "#333333";
 
-var square_size;
+
 var container = document.querySelector('#container');
+var slider = document.querySelector('#myrange');
+var slidervalue = document.querySelector('#slidervalue');
+var sel_color = document.querySelector('#colorpicker');
+var square_size;
 var div;
 var divStyle;
 var input = def;
@@ -17,44 +22,50 @@ var opa = 1; //Opacity
 var squares; 
 
 
-//For each click on the button
-btn.addEventListener('click', () => {
-    input = prompt("Enter the number of squares per side for the new grid (<=100):");
-    while(input>100 || input <0){
-        input = prompt("Invalid number...enter the number of squares per side for the new grid (x<=100 and x>0):");
-    }
-    //Create the new grid
-    create_grid(input);
-    color(cred,1)
-});
-
 //Clear ALl
-  btn_clear.addEventListener('click', () => {
+btn_clear.addEventListener('click', () => {
+    delete_grid();
     create_grid(input);
-    color(cred,opa);
-  });
+    color(sel_color.value,opa);
+});
 
 //Eraser
 btn_eraser.addEventListener('click', () => {
     color(cwhite);
   });
 
-  //Color Scale
+//Color Scale
 btn_scale.addEventListener('click', () => {
-    color(cred,0.1);
+    color(sel_color.value,0.1);
   });
 
-    //Rainbow
+//Rainbow
 btn_rainbow.addEventListener('click', () => {
     color("rainbow",1);
   });
+
+//Slider Change
+slider.onchange = function() {
+    slidervalue.textContent = this.value+'x'+this.value;
+    delete_grid();
+    input = this.value;
+    create_grid(this.value);
+    color(sel_color.value,opa);
+} 
+
+//Select Color
+sel_color.onchange = function() {
+  color(sel_color.value,opa);
+} 
+
+
 //Function random to the colors
-  function random_rgba() {
+function random_rgba() {
     var o = Math.round, r = Math.random, s = 255;
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
 }
 
-//Create the grid by default with each class square called grid-item
+//Create the grid 
 function create_grid(val){
 
     for(let i=0;i<val*val;i++){
@@ -70,6 +81,14 @@ function create_grid(val){
         divStyle.transition ='.5s all';
     }
 }
+
+//Delete current grid
+function delete_grid(){
+  squares.forEach((div) => {
+    div.remove();
+  });
+}
+
 
 //Function to add color to squares from 10% to 100% of color
 function color(color,opa){   
@@ -89,15 +108,16 @@ function color(color,opa){
                     value = value + 0.1; 
                 }
              }
-        });            
+        });           
     }); 
   }
 
 window.onload = () => {
-    //Grid default value 16x16 red color
-create_grid(input);
-color(cred,opa);
+  create_grid(input);   //Grid default value 16x16 red color
+  slidervalue.textContent = input+'x'+input; // Display the default slider value
+  slider.value = input;
+  sel_color.value = defcolor; //Default color
+  color(sel_color.value ,opa);
 }
-
 
 
